@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+  .node {
+    cursor: pointer;
+  }
+
+  .node:hover {
+    stroke: #000;
+    stroke-width: 1.5px;
+  }
+
+  .node--leaf {
+    fill: white;
+  }
+
+  .label {
+    font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-anchor: middle;
+    font-size: 25px;
+    text-shadow: 0 2px 0 #fff, 2px 0 0 #fff, -2px 0 0 #fff, 0 -2px 0 #fff;
+  }
+  /*Legend section division properties*/
+  .legend {
+      float: right;
+      margin-bottom: 20px;
+      height: 0;
+      padding-bottom: 1;
+      border-radius: 5;
+      border: 10px solid #cfdcec;
+      overflow: hidden;
+      background: #4679BD;
+      box-shadow: 0 0 3px gray;
+  }
+
+  .label,
+  .node--root,
+  /*.node--leaf */
+  {
+    pointer-events: none;
+  }
+  /* .foo
+{
+
+    opacity : 0.3;
+    height: 50%;
+    width: 25%;
+    position : absolute;
+    background-repeat: no-repeat;
+    right: 0px;
+    bottom: 0px;
+    margin-right: 0;
+    margin-bottom: 0;
+    z-index: 5000;
+    background-color: red;
+    background-position: right bottom;
+
+} */
+.bottomRight {
+    height: 200px;
+    float: right;
+    clear: right;
+}
+h2{
+  color: #32CD32;
+}
+
+</style>
+<body bgcolor=	#000000>
+  <h2>Facebook Post Politics Feed Summary</h2>
+<svg width="900" height="900"></svg>
+<div class="legend" style="display: table;">
+
+    <div class="blank" style="display: table-row; ">
+        Click To Fact-check posts
+        <br>
+    </div>
+
+    <div class="leg" style="display: table-row;">
+        <button type="submit" value="News" style="background-color:#ff0066; border-color:unset; width: 30px;height: 30px;" id="leg_news" onclick="legend(value)" ;>
+
+        </button> News
+    </div>
+    <div class="leg" style="display: table-row;">
+        <button type="submit" value="Digital" style="background-color:#47d147; border-color:unset;width: 30px;height: 30px;" id="leg_digi" onclick="legend(value)" ;>
+
+        </button> Digital
+    </div>
+    <div class="leg" style="display: table-row;">
+        <button type="submit" value="SacState" style="background-color:#47d147; border-color:unset; width: 30px;height: 30px;" id="leg_sac" onclick="legend(value)" ;>
+
+        </button> SacState
+    </div>
+    <div class="leg" style="display: table-row;">
+        <button type="submit" value="Entertainment" style="background-color:#47d147; border-color:unset;width: 30px;height: 30px;" id="leg_ent" onclick="legend(value)" ;>
+
+        </button> Entertainment
+    </div>
+    <div class="leg" style="display: table-row;">
+        <button type="submit" value="Family" style="background-color:#47d147; border-color:unset;width: 30px;height: 30px;" id="leg_fam" onclick="legend(value)" ;>
+
+        </button> Family
+    </div>
+    <div class="leg" style="display: table-row;">
+        <button type="submit" value="Health" style="background-color:#47d147; border-color:unset;width: 30px;height: 30px;" id="leg_fam" onclick="legend(value)" ;>
+
+        </button> Health
+    </div>
+</body>
+<img src = "Sample.png" class="bottomRight"></div>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+
+
+<script>
+    var xr, yr, xaxis, yaxis, bar, bg;
+
+    var svg = d3.select("svg"),
+      margin = 20,
+      width = +svg.attr("width") - margin.left - margin.right,
+      height = +svg.attr("height") - margin.top - margin.bottom;
+      diameter = +svg.attr("width"),
+      g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+
+      // Ordinal Scaling of Regions on to Colors of circles.
+      // var fill_color = d3.scaleOrdinal()
+      //     .domain(["News", "Digital", "SacState", "Entertainment", "Family", "Australia", "Central America", ])
+      //     .range(["#ff0066", "#ffff80", "#4db8ff", "#47d147", "#47d147", "#ff0066", "#47d147"]);
+
+      // Default value for data filter variable
+      regionSelect = '';
+
+
+      // Function for filtering Dataset which is already filtered by year,
+      // further by region passed by the legend()
+      // function regionFilter(value) {
+      //
+      //     if (regionSelect == '')
+      //         return value;
+      //     else
+      //         s = value.Region;
+      //     return (s.includes(regionSelect));
+      // }
+
+      // Function which passes value into regionSelect variable which inturn filters data by region
+      function legend(value) {
+          regionSelect = value;
+          getroot();
+      }
+
+
+    var color = d3.scaleLinear()
+      .domain([-1, 5])
+      .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
+      .interpolate(d3.interpolateHcl);
+      // var color = d3.scaleOrdinal()
+      //     .domain(["News", "Digital", "SacState", "Entertainment", "Family", "Australia", "Central America", ])
+      //     .range(["#ff0066", "#ffff80", "#4db8ff", "#47d147", "#47d147", "#ff0066", "#47d147"]);
+
+
+    var pack = d3.pack()
+      .size([diameter - margin, diameter - margin])
+      .padding(2);
+
+var dataSource;
+      var buttonData = ["Previous Month", "Back"];
+      // var buttonDiv = d3.select("body").append("svg")
+      var buttonDiv = d3.selectAll("body").append("svg")
+          .attr("width", diameter)
+          .attr("height", 50)
+
+      var buttons = buttonDiv.selectAll(".updateButton")
+      	.data(buttonData)
+         .enter()
+      	.append('g')
+      	.attr("class", "updateButton")
+      	.on("click", function(d, i) {
+
+      		dataSource = i;
+      		updateVis();
+          // getroot();
+      	});
+      buttons.append("rect")
+      	.attr("x", function(d, i) { return (i * 100) + 100; })
+          .attr("width", 98)
+          .attr("height", 25)
+          .attr("ry", 5)
+          // .style("background", color(2));
+          .style("stroke", "#B0E0E6")
+          .style("fill", "#B0E0E6");
+      buttons.append("text")
+          .attr("x", function(d, i) { return (i * 100) + (100 / 2) + 98; })
+          .attr("y", 12)
+          .attr("dy", "0.35em")
+          .style("text-anchor", "middle")
+          .style("font-size", "15px")
+          .text(function(d) { return d; });
+
+function getroot(){
+if(dataSource == 0 | dataSource == 1){
+  svg.selectAll("*").remove();
+  g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+}
+    d3.json("fb.json", function(error, root) {
+        console.log(root);
+      if (error) throw error;
+       // dataset1 = datam;
+
+// getroot();
+
+ // function getroot(){
+        // root = d3.stratify(root);
+
+        root = d3.hierarchy(root)
+          .sum(function(d) { return d.size; })
+          .sort(function(a, b) { return b.value - a.value; });
+
+// var value_json = regionSelect;
+// var key_j = "name:";
+ // root = root.filter(regionFilter);
+// var root =
+// // var root = data.filter( element => element.website ="yahoo")
+// root = json.parse(root,regionFilter){
+//   if (value.name == regionSelect ){
+//     root.push(value);
+//     return value;
+//   }
+// };
+//
+//       root = filterJSON(root,d.data.name,regionSelect);
+// //
+// function filterJSON(json,key, value) {
+//   var result = {};
+//   for (var explosionIndex in json) {
+//     if (json[explosionIndex][key] === value) {
+//       result[explosionIndex] = json[explosionIndex];
+//     }
+//   }
+//   return result;
+// }
+debugger;
+    // filter_region(root,regionFilter){}
+      console.log(root);
+// }
+
+ render(root);
+// }
+//////////////////////visualize render
+ function render(root){
+debugger;
+
+      var focus = root,
+        nodes = pack(root).descendants(),
+        view;
+
+
+     // var circle = g.selectAll("circle")
+     circle = g.selectAll("circle")
+     .data(nodes.filter(function (d) {
+       return d.height > 0
+     }))
+     //          .data(nodes)
+     .enter().append("circle")
+     .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
+     .style("fill", function(d) { return d.children ? color(d.depth) : null; })
+     // .style("fill", function(d) { return d.name; })
+     .on("click", function(d) {
+       if (focus !== d) {
+         if(d.children){
+           zoom(d), d3.event.stopPropagation();
+         }else{
+           var nextMonthVal = prompt("Please enter target value you want to set");
+           if(nextMonthVal){
+             alert("You have set the target of Rs. "+nextMonthVal+" for next Month");
+           }
+         }
+
+       }
+     });
+
+
+      // var leaf = g.selectAll(".bars")
+      var leaf = g.selectAll(".bars")
+        .data(nodes.filter(function(d){return d.height == 1}))
+        .enter()
+        .append("g")
+//        .attr("x",function(d){ return d.r})
+//        .attr("y",function(d){ return d.r})
+        .attr("x",0)
+        .attr("y",0)
+        .attr("height",function(d){ return d.x+d.r})
+        .attr("width",function(d){ return d.y+d.r})
+        .attr("class","bars")
+
+        .each(function(d){
+          drawBarData(this,this.__data__,d);
+        })
+
+
+      // var text = g.selectAll(".label")
+    var  text = g.selectAll(".label")
+        .data(nodes.filter(function(d){return d.height > 0}))
+        .enter().append("text")
+        .attr("class", "label")
+        .style("fill-opacity", function(d) { return d.parent === root ? 1 : 0; })
+        .style("display", function(d) { return d.parent === root ? "inline" : "none"; })
+        .text(function(d) { return d.data.name; });
+// }
+debugger;
+
+      // var node = g.selectAll("circle,.bars,.label");
+var node = g.selectAll("circle,.bars,.label");
+
+      svg
+        .style("background", color(-1))
+        .on("click", function() { zoom(root); });
+
+      zoomTo([root.x, root.y, root.r * 2 + margin]);
+
+      function zoom(d) {
+
+        var focus0 = focus; focus = d;
+        var transition = d3.transition()
+          .duration(d3.event.altKey ? 7500 : 750)
+          .tween("zoom", function(d) {
+            var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]);
+            return function(t) { zoomTo(i(t),focus); };
+          });
+
+        transition.selectAll(".label")
+          .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+          .style("fill-opacity", function(d) { return d.parent === focus ? 1 : 0; })
+          .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+          .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+
+       // transition.selectAll(".bars")
+       //   .attr("x",0)
+       //   .attr("y",0)
+       //   .attr("height",function(d){ return d.x+d.r})
+       //   .attr("width",function(d){ return d.y+d.r})
+
+        console.log("zoom called");
+      }
+
+      function zoomTo(v,focus) {
+        var k = diameter / v[2]; view = v;
+//        console.log(k)
+        node.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
+        circle.attr("r", function(d) { return d.r * k; });
+//        leaf.attr('height', function (d) {return d.r * k ;})
+//        .attr('width', function (d) {return d.r * k ;})
+//        .attr('x',function (d) {return d.r * k / -2;})
+//        .attr('y',function (d) {return d.r * k / -2;})
+//        .attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; })
+
+
+
+        console.log(focus);
+          if(focus && focus.height == 1){
+            var data2 = focus.children.map(function(d){return d.data})
+            var data1 = []
+//        console.log(data1);
+            rectwidth = focus.r,
+            rectheight = focus.r;
+            barsize = data2.length;
+            maxDataPoint = d3.max(data2, function(d){ return d.size});
+            console.log(focus.r);
+//            console.log(maxDataPoint);
+
+            var linearScale = d3.scaleLinear()
+              .domain([0,maxDataPoint])
+              .range([0, rectheight]);
+
+
+            for(var i=0; i< data2.length; i++){
+              data1.push({
+                name : data2[i].name,
+                size : linearScale(data2[i].size)
+              })
+            }
+
+            bg.attr("transform", function(d) { console.log(d); return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; })
+
+            bar.attr("x", function(d, i) {
+                console.log("D ::: >", d);
+              return i * (rectwidth / data1.length);
+            })
+              .attr("y", function(d){
+                return rectheight - d.size;
+              })
+              .attr("width", focus.r / data1.length - 2)
+              .attr("height", function(d){
+                return d.size;
+              });
+
+
+          }
+
+      }
+
+
+      function drawBarData(ele, data, d){
+          console.log(d);
+        if(!data && !data.parent)
+          return;
+
+        var data2 = data.children.map(function(e){return e.data})
+        var data1 = []
+//        console.log(data1);
+        rectwidth = d.r,
+        rectheight = d.r;
+        barsize = data2.length;
+        maxDataPoint = d3.max(data2, function(d){ return d.size});
+
+        console.log(maxDataPoint);
+
+        var linearScale = d3.scaleLinear()
+          .domain([0,maxDataPoint])
+          .range([0, rectheight]);
+
+
+        for(var i=0; i< data2.length; i++){
+          data1.push({
+            name : data2[i].name,
+            size : linearScale(data2[i].size)
+          })
+        }
+
+
+        bg = d3.select(ele).attr("transform", "translate(" + 0 +"," + 0 + ")").append("g")
+          .attr("class","chart-wrapper")
+        .attr("transform", function (d) {
+            console.log('BG ::: >>>', d);
+            return "translate("+ -d.r / 2 +","+ -d.r / 2 +")";
+        });
+
+        console.log(data1);
+
+        bar = bg.selectAll(".bar")
+          .data(data1)
+          .enter()
+          .append('rect')
+          .attr("class","bar")
+          .attr("x", function(d, i) {
+            return i * (rectwidth / data1.length);
+            })
+          .attr("y", function(d){
+              return rectheight - d.size;
+          })
+          .attr("width", d.r / data1.length - 2)
+          .attr("height", function(d){
+              return d.size;
+          });
+      };
+};
+});
+};
+// svg.remove();
+// create_svg();
+getroot();
+
+function updateVis(){
+
+  if(dataSource == 0){
+  d3.json("fb_lastmonth.json", function(error, root) {
+      console.log(root);
+    if (error) throw error;
+     // dataset1 = datam;
+
+// getroot();
+
+// function getroot(){
+
+      root = d3.hierarchy(root)
+        .sum(function(d) { return d.v1; })
+        .sort(function(a, b) { return b.value - a.value; });
+
+    console.log(root);
+// }
+
+render(root);
+// }
+//////////////////////visualize render
+function render(root){
+debugger;
+
+    var focus = root,
+      nodes = pack(root).descendants(),
+      view;
+
+svg.selectAll("*").remove();
+g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+  circle = g.selectAll("circle")
+  .data(nodes.filter(function (d) {
+        return d.height > 0
+      }))
+//          .data(nodes)
+      .enter().append("circle")
+      .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
+      .style("fill", function(d) { return d.children ? color(d.depth) : null; })
+      // .attr("fill", function(d) {
+      //     return fill(d.Region);
+      // })
+      .on("click", function(d) {
+        if (focus !== d) {
+          if(d.children){
+            zoom(d), d3.event.stopPropagation();
+          }else{
+            var nextMonthVal = prompt("Please enter target value you want to set");
+            if(nextMonthVal){
+              alert("You have set the target of Rs. "+nextMonthVal+" for next Month");
+            }
+          }
+
+        }
+      });
+
+ var leaf = g.selectAll(".bars")
+           .data(nodes.filter(function(d){return d.height == 1}))
+      .enter()
+      .append("g")
+//        .attr("x",function(d){ return d.r})
+//        .attr("y",function(d){ return d.r})
+      .attr("x",0)
+      .attr("y",0)
+      .attr("height",function(d){ return d.x+d.r})
+      .attr("width",function(d){ return d.y+d.r})
+      .attr("class","bars")
+
+      .each(function(d){
+        drawBarData(this,this.__data__,d);
+      })
+
+
+     var text = g.selectAll(".label")
+      .data(nodes.filter(function(d){return d.height > 0}))
+      .enter().append("text")
+      .attr("class", "label")
+      .style("fill-opacity", function(d) { return d.parent === root ? 1 : 0; })
+      .style("display", function(d) { return d.parent === root ? "inline" : "none"; })
+      .text(function(d) { return d.data.name; });
+// }
+debugger;
+
+     node = g.selectAll("circle,.bars,.label");
+
+    svg
+      .style("background", color(-1))
+      .on("click", function() { zoom(root); });
+
+    zoomTo([root.x, root.y, root.r * 2 + margin]);
+
+    function zoom(d) {
+
+      var focus0 = focus; focus = d;
+      var transition = d3.transition()
+        .duration(d3.event.altKey ? 7500 : 750)
+        .tween("zoom", function(d) {
+          var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]);
+          return function(t) { zoomTo(i(t),focus); };
+        });
+
+      transition.selectAll(".label")
+        .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+        .style("fill-opacity", function(d) { return d.parent === focus ? 1 : 0; })
+        .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+        .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+
+       transition.selectAll(".bars")
+         .attr("x",0)
+         .attr("y",0)
+         .attr("height",function(d){ return d.x+d.r})
+         .attr("width",function(d){ return d.y+d.r})
+
+      console.log("zoom called");
+    }
+
+    function zoomTo(v,focus) {
+      var k = diameter / v[2]; view = v;
+       console.log(k)
+      node.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
+      circle.attr("r", function(d) { return d.r * k; });
+       leaf.attr('height', function (d) {return d.r * k ;})
+       .attr('width', function (d) {return d.r * k ;})
+       .attr('x',function (d) {return d.r * k / -2;})
+       .attr('y',function (d) {return d.r * k / -2;})
+       .attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; })
+      console.log(focus);
+        if(focus && focus.height == 1){
+          var data2 = focus.children.map(function(d){return d.data})
+          var data1 = []
+//        console.log(data1);
+          rectwidth = focus.r,
+          rectheight = focus.r;
+          barsize = data2.length;
+          maxDataPoint = d3.max(data2, function(d){ return d.size});
+          console.log(focus.r);
+//            console.log(maxDataPoint);
+
+          var linearScale = d3.scaleLinear()
+            .domain([0,maxDataPoint])
+            .range([0, rectheight]);
+
+
+          for(var i=0; i< data2.length; i++){
+            data1.push({
+              name : data2[i].name,
+              size : linearScale(data2[i].size)
+            })
+          }
+
+          bg.attr("transform", function(d) { console.log(d); return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; })
+
+          bar.attr("x", function(d, i) {
+              console.log("D ::: >", d);
+            return i * (rectwidth / data1.length);
+          })
+            .attr("y", function(d){
+              return rectheight - d.size;
+            })
+            .attr("width", focus.r / data1.length - 2)
+            .attr("height", function(d){
+              return d.size;
+            });
+
+        }
+
+    }
+
+
+    function drawBarData(ele, data, d){
+        console.log(d);
+      if(!data && !data.parent)
+        return;
+
+      var data2 = data.children.map(function(e){return e.data})
+      var data1 = []
+//        console.log(data1);
+      rectwidth = d.r,
+      rectheight = d.r;
+      barsize = data2.length;
+      maxDataPoint = d3.max(data2, function(d){ return d.size});
+
+      console.log(maxDataPoint);
+
+      var linearScale = d3.scaleLinear()
+        .domain([0,maxDataPoint])
+        .range([0, rectheight]);
+
+
+      for(var i=0; i< data2.length; i++){
+        data1.push({
+          name : data2[i].name,
+          size : linearScale(data2[i].size)
+        })
+      }
+
+      bg = d3.select(ele).attr("transform", "translate(" + 0 +"," + 0 + ")").append("g")
+        .attr("class","chart-wrapper")
+      .attr("transform", function (d) {
+          console.log('BG ::: >>>', d);
+          return "translate("+ -d.r / 2 +","+ -d.r / 2 +")";
+      });
+
+      console.log(data1);
+
+      bar = bg.selectAll(".bar")
+        .data(data1)
+        .enter()
+        .append('rect')
+        .attr("class","bar")
+        .attr("x", function(d, i) {
+          return i * (rectwidth / data1.length);
+          })
+        .attr("y", function(d){
+            return rectheight - d.size;
+        })
+        .attr("width", d.r / data1.length - 2)
+        .attr("height", function(d){
+            return d.size;
+        });
+    };
+};
+});
+}else if (dataSource == 1)  {
+  // svg.remove();
+  // create_svg();
+  getroot();
+}
+};
+</script>
