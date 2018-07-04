@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+  .node {
+    cursor: pointer;
+  }
+
+  .node:hover {
+    stroke: #000;
+    stroke-width: 1.5px;
+  }
+
+  .node--leaf {
+    fill: white;
+  }
+
+  .label {
+    font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-anchor: middle;
+    font-size: 25px;
+    text-shadow: 0 2px 0 #fff, 2px 0 0 #fff, -2px 0 0 #fff, 0 -2px 0 #fff;
+  }
+  /*Legend section division properties*/
+  .legend {
+      float: right;
+      margin-bottom: 20px;
+      height: 0;
+      padding-bottom: 1;
+      border-radius: 5;
+      border: 10px solid #cfdcec;
+      overflow: hidden;
+      /* background: #4679BD; */
+      background: #86f4c0;
+
+      box-shadow: 0 0 3px gray;
+  }
+
+  .label,
+  .node--root,
+  /*.node--leaf */
+  {
+    pointer-events: none;
+  }
+
+.bottomRight {
+    height: 200px;
+    float: right;
+    clear: right;
+}
+/* Dabba Gul */
+	#power-gauge g.arc {
+		fill: steelblue;
+	}
+
+	#power-gauge g.pointer {
+		fill: #e85116;
+		stroke: #b64011;
+	}
+
+	#power-gauge g.label text {
+		text-anchor: middle;
+		font-size: 14px;
+		font-weight: bold;
+		fill: #666;
+	}
+  /* meter chalu */
+  .multiselect {
+    width: 200px;
+  }
+
+  .selectBox {
+    position: relative;
+  }
+
+  .selectBox select {
+    width: 100%;
+    font-weight: bold;
+  }
+
+  .overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+
+  #checkboxes {
+    display: none;
+    border: 1px  solid;
+  }
+
+  #checkboxes label {
+    display: block;
+  }
+
+  #checkboxes label:hover {
+    background-color: #1e90ff;
+  }
+
+  #checkboxes2 {
+    display: none;
+    border: 1px  solid;
+  }
+
+  #checkboxes2 label {
+    display: block;
+  }
+
+  #checkboxes2 label:hover {
+    background-color: #1e90ff;
+  }
+
+  #checkboxes3 {
+    display: none;
+    border: 1px  solid;
+  }
+
+  #checkboxes3 label {
+    display: block;
+  }
+
+  #checkboxes3 label:hover {
+    background-color: #1e90ff;
+  }
+h2{
+  color: #32CD32;
+}
+h3{
+  float:left;
+  clear:left
+}
+.divider{
+    width:95px;
+    height:auto;
+    display:inline-block;
+}
+</style>
+<body bgcolor=	#000000>
+<!-- <body bgcolor=	 width="1000" height="1000"> -->
+<form>
+  <h2>Political News Feed Summary</h2>
+<svg width="900" height="900"></svg>
+
+<div class="legend" style="display: table;">
+  <div class="blank" style="display: table-row; font-weight: bold">
+        Source Feedback
+        <br>
+    </div>
+    <div>
+        <div class="divider"/>
+    </div>
+     <div class="leg" style="display: table-row;">
+       <div style="float: left; width: 40px; height: 31px">
+            <button type="submit" value="News" style="background-color:#f4031b; border-color:unset; width: 30px;height: 30px;" id="leg_news" ;>
+            </button>
+       </div>
+      <div style="float: left;">
+        <div class="selectBox" onclick="showCheckboxes()">
+        <select style="height: 30px">
+          <option>Malicious Url Sources </option>
+        </select>
+      <div class="overSelect"></div>
+        </div>
+      </div>
+    </div>
+    <div>
+<div class="divider"/>
+    </div>
+
+
+   <div id="checkboxes">
+     <label for="one">
+       <input type="checkbox" id="one" />ABCnews.com.co</label>
+     <label for="two">
+       <input type="checkbox" id="two" />bients.com</label>
+     <label for="three">
+       <input type="checkbox" id="three" />bizstandardnews.com</label>
+       <label for="four">
+         <input type="checkbox" id="four" />Bloomberg.ma</label>
+       <label for="five">
+         <input type="checkbox" id="five" />Breaking-CNN.com</label>
+       <label for="six">
+         <input type="checkbox" id="six" />cnn-trending.com</label>
+         <label for="seven">
+           <input type="checkbox" id="seven" />CountyNewsroom.info</label>
+         <label for="eight">
+           <input type="checkbox" id="eight" />DrudgeReport.com.co</label>
+         <label for="nine">
+           <input type="checkbox" id="nine" />Fox-news24.com</label>
+   </div>
+
+
+
+   <div class="leg" style="display: table-row; float: left;clear: left">
+     <div style="float: left; width: 40px; height: 31px">
+            <button type="submit" value="News" style="background-color:#4679bd; border-color:unset; width: 30px;height: 30px;" id="leg_news" ;>
+            </button>
+       </div>
+     </div>
+      <div style="float: left;">
+        <div class="selectBox" onclick="showCheckboxes2()">
+       <select style="height: 30px">
+         <option>Genuine Url Sources </option>
+       </select>
+       <div class="overSelect"></div>
+     </div>
+   </div>
+     <div>
+       <div class="divider"/>
+     </div>
+
+    <div id="checkboxes2">
+     <label for="one">
+       <input type="checkbox" id="one2" />armstrongeconomics.com</label>
+     <label for="two">
+       <input type="checkbox" id="two2" />industriesnews.net</label>
+     <label for="three">
+       <input type="checkbox" id="three2" />abcnews.com</label>
+       <label for="four">
+         <input type="checkbox" id="four2" />msn.com</label>
+   </div>
+
+
+    <div class="leg" style="display: table-row;float:left; clear:left">
+      <div style="float: left; width: 40px; height: 31px">
+             <button type="submit" value="News" style="background-color:#f0f20b;float:left; border-color:unset; width: 30px;height: 30px;" id="leg_news" ;>
+             </button>
+        </div>
+      </div>
+       <div style="float: left;">
+         <div class="selectBox" onclick="showCheckboxes3()">
+        <select style="height: 30px">
+          <option>Uncertain Url Sources </option>
+        </select>
+        <div class="overSelect"></div>
+      </div>
+    </div>
+    <div>
+      <div class="divider"/>
+    </div>
+   <div id="checkboxes3">
+     <label for="one3">
+       <input type="checkbox" id="one3" />thewire.in</label>
+     <label for="two3">
+       <input type="checkbox" id="two3" />economist.com</label>
+     <label for="three3">
+       <input type="checkbox" id="three3" />industriesnew.net</label>
+       <label for="four3">
+          <input type="checkbox" id="four3" />fbcdn_xx_.net</label>
+        <label for="five3">
+          <input type="checkbox" id="five3" />varight.com</label>
+        <label for="six3">
+          <input type="checkbox" id="six3" />lasvegassun.com</label>
+          <label for="seven3">
+            <input type="checkbox" id="seven3" />ballot-access.org</label>
+          <label for="eight3">
+            <input type="checkbox" id="eight3" />goodreads.com</label>
+          <label for="nine3">
+            <input type="checkbox" id="nine3" />news.sky.com</label>
+   </div>
+    <h3>Genuine Meter -Show Confidence<h3>
+
+
+
+</form>
+</body>
+<div id="power-gauge"></div>
+
+<div id="Power-button"></div>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<script>
+
+
+var expanded = false;
+
+function showCheckboxes() {
+debugger
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+ function showCheckboxes2() {
+  var checkboxes2 = document.getElementById("checkboxes2");
+  if (!expanded) {
+    checkboxes2.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes2.style.display = "none";
+    expanded = false;
+  }
+}
+function showCheckboxes3() {
+  var checkboxes3 = document.getElementById("checkboxes3");
+  if (!expanded) {
+    checkboxes3.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes3.style.display = "none";
+    expanded = false;
+  }
+}
+// },3000); -->
+</script>
+
+<script>
+    var xr, yr, xaxis, yaxis, bar, bg;
+
+    var svg = d3.select("svg"),
+      margin = 20,
+      width = +svg.attr("width") - margin.left - margin.right,
+      height = +svg.attr("height") - margin.top - margin.bottom;
+      diameter = +svg.attr("width"),
+      g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+
+      regionSelect = '';
+      function legend(value) {
+          regionSelect = value;
+          getroot();
+      }
+
+    var color = d3.scaleLinear()
+      .domain([-1, 5])
+      .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
+      .interpolate(d3.interpolateHcl);
+
+    var pack = d3.pack()
+      .size([diameter - margin, diameter - margin])
+      .padding(2);
+
+var dataSource;
+      var buttonData = ["Previous Month", "Back","Verdict"];
+
+      var buttonDiv = d3.selectAll("body").append("svg")
+          .attr("width", diameter)
+          .attr("height", 50)
+
+
+      var buttons = buttonDiv.selectAll(".updateButton")
+      	.data(buttonData)
+        .enter()
+      	.append('g')
+      	.attr("class", "updateButton")
+      	.on("click", function(d, i) {
+
+      		dataSource = i;
+      		updateVis();
+          // getroot();
+          if (dataSource == 2) {
+            meterrun(); 
+          }
+
+      	});
+      buttons.append("rect")
+      	.attr("x", function(d, i) { return (i * 100) + 100; })
+          .attr("width", 98)
+          .attr("height", 25)
+          .attr("ry", 5)
+          // .style("background", color(2));
+          .style("stroke", "#B0E0E6")
+          .style("fill", "#B0E0E6");
+      buttons.append("text")
+          .attr("x", function(d, i) { return (i * 100) + (100 / 2) + 98; })
+          .attr("y", 12)
+          .attr("dy", "0.35em")
+          .style("text-anchor", "middle")
+          .style("font-size", "15px")
+          .text(function(d) { return d; });
+
+function getroot(){
+debugger;
+
+
+if(dataSource == 0 | dataSource == 1){
+  svg.selectAll("*").remove();
+  g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+}
+      d3.json("fb_lastmonth0.json", function(error, root) {
+        console.log(root);
+      if (error) throw error;
+
+
+        root = d3.hierarchy(root)
+          .sum(function(d) { return d.size; })
+          .sort(function(a, b) { return b.value - a.value; });
+
+debugger;
+
+        console.log(root);
+
+
+ render(root);
+
+//////////////////////visualize render
+ function render(root){
+debugger;
+
+      var focus = root,
+        nodes = pack(root).descendants(),
+        view;
+
+     circle = g.selectAll("circle")
+     .data(nodes.filter(function (d) {
+       return d.height > 0
+     }))
+     //          .data(nodes)
+     .enter().append("circle")
+     .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
+
+      .style("fill",function(d){return d.data.color_fill ? d.data.color_fill : d.children  ?  color(d.depth) : null;})
+
+     .on("click", function(d) {
+       if (focus !== d) {
+         if(d.children){
+           zoom(d),d3.event.stopPropagation();
+         }else{
+           var nextMonthVal = prompt("Please enter target value you want to set");
+           if(nextMonthVal){
+             alert("You have set the target of Rs. "+nextMonthVal+" for next Month");
+           }
+         }
+
+       }
+     });
+
+
+
+      var leaf = g.selectAll(".bars")
+        .data(nodes.filter(function(d){return d.height == 1}))
+        .enter()
+        .append("g")
+
+        .attr("x",0)
+        .attr("y",0)
+        .attr("height",function(d){ return d.x+d.r})
+        .attr("width",function(d){ return d.y+d.r})
+        .attr("class","bars")
+
+        .each(function(d){
+          drawBarData(this,this.__data__,d);
+
+        })
+
+/////////////////////////////////////////////////////////////////////////////
+
+    var  text = g.selectAll(".label")
+        .data(nodes.filter(function(d){return d.height > 0}))
+        .enter().append("text")
+        .attr("class", "label")
+        .style("fill-opacity", function(d) { return d.parent === root ? 1 : 0; })
+        .style("display", function(d) { return d.parent === root ? "inline" : "none"; })
+        .text(function(d) { return d.data.name; });
+
+debugger;
+
+
+var node = g.selectAll("circle,.bars,.label");
+
+      svg
+        .style("background", color(-1))
+        .on("click", function() { zoom(root); });
+
+      zoomTo([root.x, root.y, root.r * 2 + margin]);
+
+      function zoom(d) {
+
+        var focus0 = focus; focus = d;
+        var transition = d3.transition()
+          .duration(d3.event.altKey ? 7500 : 750)
+          .tween("zoom", function(d) {
+            var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]);
+            return function(t) { zoomTo(i(t),focus); };
+          });
+
+        transition.selectAll(".label")
+          .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+          .style("fill-opacity", function(d) { return d.parent === focus ? 1 : 0; })
+          .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+          .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+
+        console.log("zoom called");
+      }
+
+      function zoomTo(v,focus) {
+        var k = diameter / v[2]; view = v;
+
+        node.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
+        circle.attr("r", function(d) { return d.r * k; });
+
+
+        console.log(focus);
+          if(focus && focus.height == 1){
+            var data2 = focus.children.map(function(d){return d.data})
+            var data1 = []
+
+            rectwidth = focus.r,
+            rectheight = focus.r;
+            barsize = data2.length;
+            maxDataPoint = d3.max(data2, function(d){ return d.size});
+            console.log(focus.r);
+
+            var linearScale = d3.scaleLinear()
+              .domain([0,maxDataPoint])
+              .range([0, rectheight]);
+
+            for(var i=0; i< data2.length; i++){
+              data1.push({
+                name : data2[i].name,
+                size : linearScale(data2[i].size)
+              })
+            }
+
+            bg.attr("transform", function(d) { console.log(d); return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; })
+
+            bar.attr("x", function(d, i) {
+                console.log("D ::: >", d);
+              return i * (rectwidth / data1.length);
+            })
+              .attr("y", function(d){
+                return rectheight - d.size;
+              })
+              .attr("width", focus.r / data1.length - 2)
+              .attr("height", function(d){
+                return d.size;
+              });
+
+
+          }
+
+      }
+
+
+
+      function drawBarData(ele, data, d){
+          console.log(d);
+        if(!data && !data.parent)
+          return;
+
+        var data2 = data.children.map(function(e){return e.data})
+        var data1 = []
+
+        rectwidth = d.r,
+        rectheight = d.r;
+        barsize = data2.length;
+        maxDataPoint = d3.max(data2, function(d){ return d.size});
+
+        console.log(maxDataPoint);
+
+        var linearScale = d3.scaleLinear()
+          .domain([0,maxDataPoint])
+          .range([0, rectheight]);
+
+
+        for(var i=0; i< data2.length; i++){
+          data1.push({
+            name : data2[i].name,
+            size : linearScale(data2[i].size)
+          })
+        }
+
+
+        bg = d3.select(ele).attr("transform", "translate(" + 0 +"," + 0 + ")").append("g")
+          .attr("class","chart-wrapper")
+        .attr("transform", function (d) {
+            console.log('BG ::: >>>', d);
+            return "translate("+ -d.r / 2 +","+ -d.r / 2 +")";
+        });
+
+        console.log(data1);
+
+        bar = bg.selectAll(".bar")
+          .data(data1)
+          .enter()
+          .append('rect')
+          .attr("class","bar")
+          .attr("x", function(d, i) {
+            return i * (rectwidth / data1.length);
+            })
+          .attr("y", function(d){
+              return rectheight - d.size;
+          })
+          .attr("width", d.r / data1.length - 2)
+          .attr("height", function(d){
+              return d.size;
+          });
+
+      };
+};
+});
+};
+
+getroot();
+
+function updateVis(){
+debugger;
+
+  if(dataSource == 0){
+  d3.json("fb00.json", function(error, root) {
+      console.log(root);
+    if (error) throw error;
+      root = d3.hierarchy(root)
+        .sum(function(d) { return d.v1; })
+        .sort(function(a, b) { return b.value - a.value; });
+
+    console.log(root);
+
+render(root);
+
+//////////////////////visualize render
+function render(root){
+debugger;
+
+    var focus = root,
+      nodes = pack(root).descendants(),
+      view;
+
+svg.selectAll("*").remove();
+g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+  circle = g.selectAll("circle")
+  .data(nodes.filter(function (d) {
+        return d.height > 0
+      }))
+      .enter().append("circle")
+      .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
+         .style("fill",function(d){return d.data.color_fill ? d.data.color_fill : d.children  ?  color(d.depth) : null;})
+
+      .on("click", function(d) {
+        if (focus !== d) {
+          if(d.children){
+            zoom(d), d3.event.stopPropagation();
+          }else{
+            var nextMonthVal = prompt("Please enter target value you want to set");
+            if(nextMonthVal){
+              alert("You have set the target of Rs. "+nextMonthVal+" for next Month");
+            }
+          }
+
+        }
+      });
+
+ var leaf = g.selectAll(".bars")
+           .data(nodes.filter(function(d){return d.height == 1}))
+      .enter()
+      .append("g")
+      .attr("x",0)
+      .attr("y",0)
+      .attr("height",function(d){ return d.x+d.r})
+      .attr("width",function(d){ return d.y+d.r})
+      .attr("class","bars")
+
+      .each(function(d){
+        drawBarData(this,this.__data__,d);
+      })
+
+
+     var text = g.selectAll(".label")
+      .data(nodes.filter(function(d){return d.height > 0}))
+      .enter().append("text")
+      .attr("class", "label")
+      .style("fill-opacity", function(d) { return d.parent === root ? 1 : 0; })
+      .style("display", function(d) { return d.parent === root ? "inline" : "none"; })
+      .text(function(d) { return d.data.name; });
+
+debugger;
+
+     node = g.selectAll("circle,.bars,.label");
+
+    svg
+      .style("background", color(-1))
+      .on("click", function() { zoom(root); });
+
+    zoomTo([root.x, root.y, root.r * 2 + margin]);
+
+    function zoom(d) {
+
+      var focus0 = focus; focus = d;
+      var transition = d3.transition()
+        .duration(d3.event.altKey ? 7500 : 750)
+        .tween("zoom", function(d) {
+          var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]);
+          return function(t) { zoomTo(i(t),focus); };
+        });
+
+      transition.selectAll(".label")
+        .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+        .style("fill-opacity", function(d) { return d.parent === focus ? 1 : 0; })
+        .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+        .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+
+       transition.selectAll(".bars")
+         .attr("x",0)
+         .attr("y",0)
+         .attr("height",function(d){ return d.x+d.r})
+         .attr("width",function(d){ return d.y+d.r})
+
+      console.log("zoom called");
+    }
+
+    function zoomTo(v,focus) {
+      var k = diameter / v[2]; view = v;
+       console.log(k)
+      node.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
+      circle.attr("r", function(d) { return d.r * k; });
+       leaf.attr('height', function (d) {return d.r * k ;})
+       .attr('width', function (d) {return d.r * k ;})
+       .attr('x',function (d) {return d.r * k / -2;})
+       .attr('y',function (d) {return d.r * k / -2;})
+       .attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; })
+      console.log(focus);
+        if(focus && focus.height == 1){
+          var data2 = focus.children.map(function(d){return d.data})
+          var data1 = []
+//        console.log(data1);
+          rectwidth = focus.r,
+          rectheight = focus.r;
+          barsize = data2.length;
+          maxDataPoint = d3.max(data2, function(d){ return d.size});
+          console.log(focus.r);
+//            console.log(maxDataPoint);
+
+          var linearScale = d3.scaleLinear()
+            .domain([0,maxDataPoint])
+            .range([0, rectheight]);
+
+
+          for(var i=0; i< data2.length; i++){
+            data1.push({
+              name : data2[i].name,
+              size : linearScale(data2[i].size)
+            })
+          }
+
+          bg.attr("transform", function(d) { console.log(d); return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; })
+
+          bar.attr("x", function(d, i) {
+              console.log("D ::: >", d);
+            return i * (rectwidth / data1.length);
+          })
+            .attr("y", function(d){
+              return rectheight - d.size;
+            })
+            .attr("width", focus.r / data1.length - 2)
+            .attr("height", function(d){
+              return d.size;
+            });
+
+        }
+
+    }
+
+
+    function drawBarData(ele, data, d){
+        console.log(d);
+      if(!data && !data.parent)
+        return;
+
+      var data2 = data.children.map(function(e){return e.data})
+      var data1 = []
+//        console.log(data1);
+      rectwidth = d.r,
+      rectheight = d.r;
+      barsize = data2.length;
+      maxDataPoint = d3.max(data2, function(d){ return d.size});
+
+      console.log(maxDataPoint);
+
+      var linearScale = d3.scaleLinear()
+        .domain([0,maxDataPoint])
+        .range([0, rectheight]);
+
+
+      for(var i=0; i< data2.length; i++){
+        data1.push({
+          name : data2[i].name,
+          size : linearScale(data2[i].size)
+        })
+      }
+
+      bg = d3.select(ele).attr("transform", "translate(" + 0 +"," + 0 + ")").append("g")
+        .attr("class","chart-wrapper")
+      .attr("transform", function (d) {
+          console.log('BG ::: >>>', d);
+          return "translate("+ -d.r / 2 +","+ -d.r / 2 +")";
+      });
+
+      console.log(data1);
+
+      bar = bg.selectAll(".bar")
+        .data(data1)
+        .enter()
+        .append('rect')
+        .attr("class","bar")
+        .attr("x", function(d, i) {
+          return i * (rectwidth / data1.length);
+          })
+        .attr("y", function(d){
+            return rectheight - d.size;
+        })
+        .attr("width", d.r / data1.length - 2)
+        .attr("height", function(d){
+            return d.size;
+        });
+    };
+};
+});
+}else if (dataSource == 1)  {
+
+  getroot();
+}
+};
+
+ function meterrun() {
+d3.select('#power-gauge').enter();
+debugger;
+var gauge = function(container, configuration) {
+  var that = {};
+  var config = {
+    size						: 710,
+    clipWidth					: 200,
+    clipHeight					: 110,
+    ringInset					: 20,
+    ringWidth					: 20,
+
+    pointerWidth				: 10,
+    pointerTailLength			: 5,
+    pointerHeadLengthPercent	: 0.9,
+
+    minValue					: 0,
+    maxValue					: 10,
+
+    minAngle					: -90,
+    maxAngle					: 90,
+
+    transitionMs				: 750,
+
+    majorTicks					: 5,
+    labelFormat					: d3.format('d'),
+    labelInset					: 10,
+
+    arcColorFn					: d3.interpolateHsl(d3.rgb('#e8e2ca'), d3.rgb('#3e6c0a'))
+  };
+  var range = undefined;
+  var r = undefined;
+  var pointerHeadLength = undefined;
+  var value = 0;
+
+  var svg = undefined;
+  var arc = undefined;
+  var scale = undefined;
+  var ticks = undefined;
+  var tickData = undefined;
+  var pointer = undefined;
+
+  var donut = d3.pie();
+
+  function deg2rad(deg) {
+    return deg * Math.PI / 180;
+  }
+
+  function newAngle(d) {
+    var ratio = scale(d);
+    var newAngle = config.minAngle + (ratio * range);
+    return newAngle;
+  }
+
+  function configure(configuration) {
+    var prop = undefined;
+    for ( prop in configuration ) {
+      config[prop] = configuration[prop];
+    }
+
+    range = config.maxAngle - config.minAngle;
+    r = config.size / 2;
+    pointerHeadLength = Math.round(r * config.pointerHeadLengthPercent);
+
+    // a linear scale that maps domain values to a percent from 0..1
+    scale = d3.scaleLinear()
+      .range([0,1])
+      .domain([config.minValue, config.maxValue]);
+
+    ticks = scale.ticks(config.majorTicks);
+    tickData = d3.range(config.majorTicks).map(function() {return 1/config.majorTicks;});
+
+    arc = d3.arc()
+      .innerRadius(r - config.ringWidth - config.ringInset)
+      .outerRadius(r - config.ringInset)
+      .startAngle(function(d, i) {
+        var ratio = d * i;
+        return deg2rad(config.minAngle + (ratio * range));
+      })
+      .endAngle(function(d, i) {
+        var ratio = d * (i+1);
+        return deg2rad(config.minAngle + (ratio * range));
+      });
+  }
+  that.configure = configure;
+
+  function centerTranslation() {
+    return 'translate('+r +','+ r +')';
+  }
+
+  function isRendered() {
+    return (svg !== undefined);
+  }
+  that.isRendered = isRendered;
+
+  function render(newValue) {
+    debugger;
+    svg = d3.select(container)
+      .append('svg:svg')
+        .attr('class', 'gauge')
+        .attr('width', config.clipWidth)
+        .attr('height', config.clipHeight);
+
+    var centerTx = centerTranslation();
+
+    var arcs = svg.append('g')
+        .attr('class', 'arc')
+        .attr('transform', centerTx);
+
+    arcs.selectAll('path')
+        .data(tickData)
+      .enter().append('path')
+        .attr('fill', function(d, i) {
+          return config.arcColorFn(d * i);
+        })
+        .attr('d', arc);
+
+    var lg = svg.append('g')
+        .attr('class', 'label')
+        .attr('transform', centerTx);
+    lg.selectAll('text')
+        .data(ticks)
+      .enter().append('text')
+        .attr('transform', function(d) {
+          var ratio = scale(d);
+          var newAngle = config.minAngle + (ratio * range);
+          return 'rotate(' +newAngle +') translate(0,' +(config.labelInset - r) +')';
+        })
+        .text(config.labelFormat);
+
+    var lineData = [ [config.pointerWidth / 2, 0],
+            [0, -pointerHeadLength],
+            [-(config.pointerWidth / 2), 0],
+            [0, config.pointerTailLength],
+            [config.pointerWidth / 2, 0] ];
+    var pointerLine = d3.line().curve(d3.curveLinear)
+    var pg = svg.append('g').data([lineData])
+        .attr('class', 'pointer')
+        .attr('transform', centerTx);
+
+    pointer = pg.append('path')
+      .attr('d', pointerLine/*function(d) { return pointerLine(d) +'Z';}*/ )
+      .attr('transform', 'rotate(' +config.minAngle +')');
+
+    update(newValue === undefined ? 0 : newValue);
+  }
+  that.render = render;
+  function update(newValue, newConfiguration) {
+    if ( newConfiguration  !== undefined) {
+      configure(newConfiguration);
+    }
+    var ratio = scale(newValue);
+    var newAngle = config.minAngle + (ratio * range);
+    pointer.transition()
+      .duration(config.transitionMs)
+      .ease(d3.easeElastic)
+      .attr('transform', 'rotate(' +newAngle +')');
+  }
+  that.update = update;
+
+  configure(configuration);
+
+  return that;
+};
+
+function onDocumentReady() {
+  debugger;
+   var powerGauge = gauge('#power-gauge', {
+
+
+    size: 300,
+    clipWidth: 300,
+    clipHeight: 160,
+    ringWidth: 60,
+    maxValue: 10,
+    transitionMs: 4000,
+  });
+  powerGauge.render();
+
+var score;
+
+function updateReadings(upnum) {
+  // just pump in random data here...
+  if (score<7) {
+    powerGauge.update(score + upnum);
+  }else {
+    var meter_val = (score + upnum)%10;
+     powerGauge.update(meter_val);
+  }
+
+
+}
+temp_score = Math.random() * 10
+if (score<7) {
+  powerGauge.update(temp_score);
+}else {
+  var meter_val1 = (temp_score)%10;
+   powerGauge.update(meter_val1);
+}
+powerGauge.update();
+
+// every few seconds update reading values
+function first1updateReadings(upnum) {
+  // just pump in random data here...
+   score = Math.random() * 10
+   // powerGauge.update(score);
+   if (score<7) {
+     powerGauge.update(score);
+   }else {
+     var meter_val2 = (score)%10;
+      powerGauge.update(meter_val2);
+   }
+}
+first1updateReadings();
+function deletefun() {
+  var myNode = document.getElementById("power-gauge");
+  debugger;
+  myNode.innerHTML = '';
+
+     svg.remove();
+
+}
+      var w= 380;
+      var h= 50;
+      // var svg= d3.select("body")
+      var svg= d3.select("#Power-button")
+                  .append("svg")
+                  .attr("width",w)
+                  .attr("height",h)
+
+
+      //container for all buttons
+      var allButtons= svg.append("g")
+                          .attr("id","allButtons")
+      //fontawesome button labels
+      var labels= ['Low','Med','High','Save'];
+      //colors for different button states
+      var defaultColor= "#7777BB"
+      var hoverColor= "#0000ff"
+      var pressedColor= "#000077"
+      var result_value =0
+      //groups for each button (which will hold a rect and text)
+      var buttonGroups= allButtons.selectAll("g.button")
+                              .data(labels)
+                              .enter()
+                              .append("g")
+                              .attr("class","button")
+                              .style("cursor","pointer")
+                              .on("click",function(d,i) {
+                                  updateButtonColors(d3.select(this), d3.select(this.parentNode))
+                                  d3.select("#numberToggle").text(i+3)
+                                  // result_value = i + 3
+                                  if (i == 0) {
+                                    updateReadings(-1.8)
+                                  }else if (i == 3) {
+                                     // first1updateReadings()
+                                     deletefun();
+                                  }
+                                  else
+                                  updateReadings(i + 1.3)
+                              })
+                              .on("mouseover", function() {
+                                  if (d3.select(this).select("rect").attr("fill") != pressedColor) {
+                                      d3.select(this)
+                                          .select("rect")
+                                          .attr("fill",hoverColor);
+                                  }
+                              })
+                              .on("mouseout", function() {
+                                  if (d3.select(this).select("rect").attr("fill") != pressedColor) {
+                                      d3.select(this)
+                                          .select("rect")
+                                          .attr("fill",defaultColor);
+                                  }
+                              })
+      var bWidth= 70; //button width
+      var bHeight= 25; //button height
+      var bSpace= 10; //space between buttons
+      var x0= 20; //x offset
+      var y0= 10; //y offset
+      //adding a rect to each toggle button group
+      //rx and ry give the rect rounded corner
+      buttonGroups.append("rect")
+                  .attr("class","buttonRect")
+                  .attr("width",bWidth)
+                  .attr("height",bHeight)
+                  .attr("x",function(d,i) {return x0+(bWidth+bSpace)*i;})
+                  .attr("y",y0)
+                  .attr("rx",5) //rx and ry give the buttons rounded corners
+                  .attr("ry",5)
+                  .attr("fill",defaultColor)
+      //adding text to each toggle button group, centered
+      //within the toggle button rect
+      buttonGroups.append("text")
+                  .attr("class","buttonText")
+                  .attr("font-family","FontAwesome")
+                  .attr("x",function(d,i) {
+                      return x0 + (bWidth+bSpace)*i + bWidth/2;
+                  })
+                  .attr("y",y0+bHeight/2)
+                  .attr("text-anchor","middle")
+                  .attr("dominant-baseline","central")
+                  .attr("fill","white")
+                  .text(function(d) {return d;})
+      function updateButtonColors(button, parent) {
+          parent.selectAll("rect")
+                  .attr("fill",defaultColor)
+          button.select("rect")
+                  .attr("fill",pressedColor)
+      }
+}
+
+
+onDocumentReady();
+}
+</script>
